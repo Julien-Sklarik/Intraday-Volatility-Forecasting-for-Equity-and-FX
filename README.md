@@ -1,39 +1,58 @@
 Intraday Volatility Forecasting for Equity and FX
 =================================================
 
-I built this project to estimate and forecast intraday volatility for both equities and currency pairs.  
-I wanted to show how I handle data, apply microstructure-aware estimators, and test short-horizon models in a way that can be reused in practice.
+I built this project to estimate and forecast intraday volatility for both stocks and currency pairs. 
+My goal was to turn raw high-frequency data into stable realized volatility measures and test 
+whether short-horizon forecasts can be extracted in a simple and transparent way.
 
-Project motivation
-------------------
-I care about short horizon risk because trading decisions often need intraday signals that are robust and quick to compute.  
-In my work here, I computed realized volatility at 10-minute, 30-minute, and 1-hour horizons and compared simple linear models with autoregressive baselines.
+Why I worked on this
+--------------------
+I wanted to better understand how intraday risk evolves within a trading session. 
+I focused on realized volatility at ten minute, thirty minute, and one hour horizons. 
+I then compared a simple regression on multi-horizon inputs with an autoregressive benchmark.
 
-What I included
----------------
-• A Python package under `src/ivf` with functions for realized volatility estimation, model fitting, and plots  
-• Two polished notebooks, one on equities and one on FX, that show the workflow end to end  
-• A small research note in `docs` that summarizes my results in plain language  
-• A demo figure in `assets` so the repo front page has a visual  
-• A requirements file to make the setup easy  
+What I did
+----------
+• I computed realized volatility measures from one minute returns, using both direct sums and bias-reduced estimators.  
+• I fitted OLS models with multiple horizon inputs, similar to a HAR approach, and compared them to AR models with six lags.  
+• I tested both equities (large cap and small cap) and major FX pairs.  
+• I documented the whole process in notebooks and summarized results in a compact research note.  
 
-Main takeaways
---------------
-• For Microsoft, realized volatility is highest at the open, lower mid-day, and picks up again into the close:contentReference[oaicite:0]{index=0}.  
-• For QUBT, a micro-cap, the baseline volatility is higher with frequent spikes. OLS fits reasonably in-sample but out-of-sample is unstable:contentReference[oaicite:1]{index=1}.  
-• For EUR/JPY and USD/JPY, out-of-sample predictability is more stable with positive R², while EUR/USD remains harder to forecast:contentReference[oaicite:2]{index=2}.  
-• Overall, OLS on multi-horizon features outperforms AR(6) benchmarks.
-
-How to run it
+Main insights
 -------------
-1. Create a fresh Python environment  
-2. Install dependencies with `pip install -r requirements.txt`  
-3. Open one of the notebooks in the `notebooks` folder  
-4. Run all cells to reproduce the plots and model fits  
+• Volatility is highest at the market open, decays mid-day, and rises again near the close.  
+• OLS models perform well in sample but often lose predictive power out of sample, especially without de-seasonalizing by time of day.  
+• In FX, I found that EURJPY and USDJPY had stable positive out of sample R², while EURUSD did not.  
+• Small cap names showed much higher volatility clustering compared to large caps.  
 
-If you want to dig deeper, the code in `src/ivf` can be imported into any script or notebook. The `docs` folder holds my research note with the main results.
-
-Credits
+Preview
 -------
-I developed this project during my time at UC Berkeley and reworked it into a self-contained repo.  
-It represents my own research and implementation choices, with a focus on clarity and reusability.
+![Demo intraday RV shape](assets/figures/rv_demo.png)
+
+Project structure
+-----------------
+• src  Python package with functions for realized volatility, model fitting, and plots  
+• notebooks  Two polished notebooks that cover equity and FX analysis  
+• docs  A short research note with the main results I got  
+• assets  A demo figure for quick visualization on the front page  
+• data  Folder to place input CSVs if not pulled via API  
+• results  Saved tables and plots  
+
+How to run my work
+------------------
+1. Create a new virtual environment  
+2. Install dependencies with `pip install -r requirements.txt`  
+3. Open any notebook in the notebooks folder and run it end to end  
+4. The docs folder contains my research summary in plain text  
+
+Why this matters
+----------------
+My work shows that realized volatility features can capture short horizon risk patterns and provide 
+useful signals, even if forecasts remain fragile at very high frequency. 
+This type of analysis can help build intuition for both execution strategies and short horizon risk management.
+
+Credit
+------
+This project started from work I did during my time at UC Berkeley MFE. 
+I restructured it into a standalone project with reusable code, so I can use it as a base for further research 
+and as a demonstration of my approach to intraday data and volatility forecasting.
