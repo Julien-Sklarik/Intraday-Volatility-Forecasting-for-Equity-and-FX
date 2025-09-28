@@ -1,76 +1,48 @@
-Intraday Volatility Forecasting for Equity and FX
-=================================================
+Intraday Volatility Forecasting
+================================
 
-A compact research style project that estimates and predicts intraday volatility for both stocks and currency pairs.  
-It showcases clean data handling, microstructure aware estimators, and short horizon forecasting in a way that reads like a professional project rather than class work.
+This project is my work on short horizon volatility modeling for equities and FX.  
+I built realized volatility estimators at multiple horizons, compared them with simple forecasting models, and analyzed how they perform in and out of sample.  
+The repo is a cleaned up version of my Berkeley research, rewritten to look like a standalone project.
 
----
+My motivation
+-------------
+I wanted to study how volatility clusters within the trading day and whether simple models can capture these patterns.  
+My goal was to make the code reusable so that anyone can plug in new data and run the pipeline without extra effort.
+
+What I did
+----------
+I computed realized volatility using one minute returns, aggregated at ten, thirty, and sixty minute horizons.  
+I estimated OLS regressions with multi horizon inputs and compared them to AR models with six lags.  
+I applied this both to equities such as Microsoft and Quantum Computing, and to currency pairs like EURUSD, EURJPY, and USDJPY.  
+I documented the results in notebooks and summarized the findings in a short research note.
 
 Why this matters
 ----------------
-* Intraday risk moves fast. Firms care about nowcasts and next step forecasts that are stable and reproducible.  
-* The code computes realized volatility at 10-minute, 30-minute, and 1-hour horizons and compares simple linear models with autoregressive baselines.  
-* The repo carries ready to run notebooks plus a small demo figure for quick visual confirmation.  
+Volatility is at the heart of risk and trading decisions.  
+By showing how predictability appears and disappears at different horizons, I built intuition about microstructure noise, persistence, and mean reversion.  
+This kind of work helps design better signals and avoid overfitting when building real strategies.
 
----
+Repo contents
+-------------
+src/ivf          my Python package with estimators, models, and plotting tools  
+notebooks        my Jupyter notebooks for equities and FX  
+docs             my research note with results and interpretations  
+assets           my demo figures that render in the README  
+data             a folder for sample or user supplied data  
+results          a folder where I saved output figures and tables  
 
-What you can run
-----------------
-* Notebooks for equity and FX under the `notebooks` folder  
-  They call helper functions to compute realized volatility, fit models, and plot the term structure.  
-
-* A compact research note in the `docs` folder  
-  It summarizes results with references to charts and metrics.  
-
----
+How to run
+----------
+1. Create a fresh environment  
+2. Install dependencies with `pip install -r requirements.txt`  
+3. Open one of the notebooks under notebooks/ and run end to end  
+4. Check the docs/ folder for a compact research summary  
 
 Preview
 -------
 ![Demo intraday RV shape](assets/figures/rv_demo.png)
 
----
-
-High level method
------------------
-* Prices are turned into log returns at 1-minute frequency.  
-* Squared returns are summed within 10-minute, 30-minute, and 1-hour buckets to form realized volatility features.  
-* Two-scale ideas reduce microstructure bias when sampling at high frequency.  
-* Forecasts use an OLS on multi-horizon features and a simple AR with six lags as a control.  
-* Evaluation is out of sample using a last-third split.  
-
----
-
-Main contents
--------------
-* `src`  
-  Python package `ivf` with utilities for realized volatility, model fitting, and plots  
-
-* `notebooks`  
-  Two polished notebooks for equity and FX  
-
-* `docs`  
-  A short research note with key findings  
-
-* `assets`  
-  A demo figure you can show on the repo front page  
-
-* `data`  
-  Place any private CSV data here if you cannot pull from an API  
-
-* `results`  
-  Saved figures and tables go here  
-
----
-
-How to use
-----------
-1. Create a fresh environment  
-2. Install dependencies from `requirements.txt`  
-3. Open the notebooks and run end to end  
-4. See the `docs` folder for a compact story and numbers you can cite during calls  
-
----
-
 Credit
 ------
-This work originated during Berkeley MFE study and was reworked into a self-contained project with a professional slant.
+This is my own work carried out during my time at Berkeley, repackaged here as a clean research project.
